@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all posts
+const allPosts = await getCollection('posts');
+const publishedPosts = allPosts
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Get unique tags
+const allTags = [...new Set(allPosts.map(post => post.data.tag))];
+
+// Get the current tag filter from URL params
+const currentTag = Astro.url.searchParams.get('tag');
+const filteredPosts = currentTag 
+  ? publishedPosts.filter(post => post.data.tag === currentTag)
+  : publishedPosts;
+---
+
+<BaseLayout title="Posts - HorseWriter Blog">
+  <!-- Header Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div style="text-align: center;">
+          <h1 class="hero-title">Mis Escritos</h1>
+          <p class="hero-description">
+            Cuentos, relatos, crónicas y artículos desde mi rincón de ideas
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Section -->
+  <section class="filter-section">
+    <div class="container">
+      <div class="filter-buttons">
+        <a href="/posts" 
+           class={`filter-btn ${!currentTag ? 'active' : ''}`}>
+          Todos
+        </a>
+        {allTags.map(tag => (
+          <a href={`/posts?tag=${tag}`}
+             class={`filter-btn ${currentTag === tag ? 'active' : ''}`}>
+            {tag}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Posts Grid -->
+  <section class="posts-section">
+    <div class="container">
+      {filteredPosts.length > 0 ? (
+        <div class="posts-grid">
+          {filteredPosts.map((post) => (
+            <article class="post-card">
+              {post.data.image && (
+                <div class="post-image">
+                  <img src={post.data.image} 
+                       alt={post.data.title}>
+                  <div class="post-image-overlay"></div>
+                </div>
+              )}
+              
+              <div class="post-content">
+                <div class="post-meta">
+                  <span class={`post-tag ${post.data.tag}`}>
+                    {post.data.tag}
+                  </span>
+                  <time class="post-date">
+                    {post.data.pubDate.toLocaleDateString('es-ES')}
+                  </time>
+                </div>
+                
+                <h2 class="post-title">
+                  <a href={`/posts/${post.slug}`}>
+                    {post.data.title}
+                  </a>
+                </h2>
+                
+                <p class="post-description">
+                  {post.data.description}
+                </p>
+                
+                <div class="post-footer">
+                  <span class="post-author">Por {post.data.author}</span>
+                  <a href={`/posts/${post.slug}`} class="post-read-more">
+                    Leer más
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <div class="empty-state-icon">📝</div>
+          <h2>
+            {currentTag ? `No hay posts en "${currentTag}"` : 'Próximamente...'}
+          </h2>
+          <p>
+            {currentTag 
+              ? `Aún no he publicado contenido en la categoría "${currentTag}". ¡Vuelve pronto!`
+              : 'Estoy preparando contenido increíble para compartir contigo. ¡Vuelve pronto!'
+            }
+          </p>
+          {currentTag && (
+            <a href="/posts" class="btn btn-primary">
+              Ver todos los posts
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">
+          ¿Te gusta lo que lees?
+        </h2>
+        <p class="cta-description">
+          Si disfrutas de mis escritos y quieres contenido similar para tu negocio, 
+          hablemos sobre cómo puedo ayudarte.
+        </p>
+        <a href="mailto:alex@horsewriter.com" class="btn btn-white">
+          Contactar para proyectos
+          <svg style="width: 1.25rem; height: 1.25rem; margin-left: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+

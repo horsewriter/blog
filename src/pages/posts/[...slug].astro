@@ -1,0 +1,176 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+
+const post = Astro.props;
+const { Content } = await post.render();
+
+// Get related posts (same tag, excluding current post)
+const allPosts = await getCollection('posts');
+const relatedPosts = allPosts
+  .filter(p => p.data.tag === post.data.tag && p.slug !== post.slug && !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout title={`${post.data.title} - HorseWriter Blog`} description={post.data.description}>
+  <!-- Post Header -->
+  <article class="post-header">
+    <div class="container">
+      <div class="post-header-content">
+        <!-- Post Meta -->
+        <div class="post-header-center">
+          <div class="post-header-meta">
+            <span class={`post-tag ${post.data.tag}`}>
+              {post.data.tag}
+            </span>
+            <time class="post-date">
+              {post.data.pubDate.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </time>
+          </div>
+          
+          <h1 class="post-header-title">
+            {post.data.title}
+          </h1>
+          
+          <p class="post-header-description">
+            {post.data.description}
+          </p>
+          
+          <div class="post-header-author">
+            <span>Por</span>
+            <span class="author-name">{post.data.author}</span>
+          </div>
+        </div>
+
+        <!-- Featured Image -->
+        {post.data.image && (
+          <div class="post-featured-image">
+            <img src={post.data.image} 
+                 alt={post.data.title}>
+          </div>
+        )}
+
+        <!-- Post Content -->
+        <div class="prose">
+          <Content />
+        </div>
+
+        <!-- Post Footer -->
+        <div class="post-footer">
+          <div class="post-footer-content">
+            <div class="post-author-info">
+              <div class="post-author-avatar">
+                <span>AM</span>
+              </div>
+              <div class="post-author-details">
+                <p>Alex Mejía</p>
+                <p>Ghostwriter especializado</p>
+              </div>
+            </div>
+            
+            <div class="post-footer-actions">
+              <a href="mailto:alex@horsewriter.com" class="btn btn-primary">
+                Contactar
+              </a>
+              <a href="/posts" class="btn btn-secondary">
+                Ver más posts
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Posts -->
+  {relatedPosts.length > 0 && (
+    <section class="related-posts">
+      <div class="container">
+        <div class="related-posts-content">
+          <h2 class="related-posts-title">
+            Más {post.data.tag}s
+          </h2>
+          
+          <div class="related-posts-grid">
+            {relatedPosts.map((relatedPost) => (
+              <article class="post-card">
+                {relatedPost.data.image && (
+                  <div class="post-image">
+                    <img src={relatedPost.data.image} 
+                         alt={relatedPost.data.title}>
+                    <div class="post-image-overlay"></div>
+                  </div>
+                )}
+                
+                <div class="post-content">
+                  <div class="post-meta">
+                    <span class={`post-tag ${relatedPost.data.tag}`}>
+                      {relatedPost.data.tag}
+                    </span>
+                    <time class="post-date">
+                      {relatedPost.data.pubDate.toLocaleDateString('es-ES')}
+                    </time>
+                  </div>
+                  
+                  <h3 class="post-title">
+                    <a href={`/posts/${relatedPost.slug}`}>
+                      {relatedPost.data.title}
+                    </a>
+                  </h3>
+                  
+                  <p class="post-description">
+                    {relatedPost.data.description}
+                  </p>
+                  
+                  <a href={`/posts/${relatedPost.slug}`} class="post-read-more">
+                    Leer más
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">
+          ¿Te gustó este {post.data.tag}?
+        </h2>
+        <p class="cta-description">
+          Si necesitas contenido de calidad similar para tu negocio, 
+          hablemos sobre cómo puedo ayudarte a conectar con tu audiencia.
+        </p>
+        <div class="cta-buttons">
+          <a href="mailto:alex@horsewriter.com" class="btn btn-white">
+            Contactar para proyectos
+          </a>
+          <a href="/posts" class="btn btn-secondary">
+            Ver más escritos
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+

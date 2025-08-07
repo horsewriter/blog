@@ -1,0 +1,192 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get recent posts
+const allPosts = await getCollection('posts');
+const recentPosts = allPosts
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout title="HorseWriter Blog - Alex Mejía">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-grid">
+          <div class="hero-text">
+            <h1 class="hero-title">
+              Hola, soy <span class="highlight">Alex Mejía</span>
+            </h1>
+            <p class="hero-description">
+              Ghostwriter especializado en contenido inmobiliario y corporativo. 
+              Transformo ideas complejas en narrativas que conectan y convierten.
+            </p>
+            <div class="hero-buttons">
+              <a href="/posts" class="btn btn-primary">
+                Ver mis escritos
+              </a>
+              <a href="/about" class="btn btn-secondary">
+                Conoce mi historia
+              </a>
+            </div>
+          </div>
+          
+          <div class="hero-image">
+            <div class="hero-image-wrapper">
+              <img src="/src/assets/images/elegant-writing.jpg" 
+                   alt="Escritura elegante">
+              <div class="hero-image-overlay"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section class="experience-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Mi Experiencia</h2>
+        <p class="section-description">
+          Una combinación única de habilidades técnicas y creatividad narrativa
+        </p>
+      </div>
+      
+      <div class="experience-grid">
+        <div class="experience-card">
+          <div class="experience-icon">💻</div>
+          <h3>Desarrollo & Ciberseguridad</h3>
+          <p>
+            5 años de experiencia en desarrollo de software y ciberseguridad, 
+            proporcionando una base técnica sólida para entender productos complejos.
+          </p>
+        </div>
+        
+        <div class="experience-card">
+          <div class="experience-icon">✍️</div>
+          <h3>Ghostwriting Especializado</h3>
+          <p>
+            3 años creando contenido para clientes inmobiliarios y corporativos, 
+            desde newsletters hasta ebooks que generan resultados.
+          </p>
+        </div>
+        
+        <div class="experience-card">
+          <div class="experience-icon">🎯</div>
+          <h3>Contenido que Convierte</h3>
+          <p>
+            Especializado en LinkedIn posts, pitch corporativos y discursos 
+            que conectan con audiencias específicas y generan engagement.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Posts Section -->
+  <section class="posts-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Últimos Escritos</h2>
+        <p class="section-description">
+          Mi rincón de ideas donde comparto cuentos, relatos, crónicas y artículos
+        </p>
+      </div>
+      
+      {recentPosts.length > 0 ? (
+        <div class="posts-grid">
+          {recentPosts.map((post) => (
+            <article class="post-card">
+              {post.data.image && (
+                <div class="post-image">
+                  <img src={post.data.image} 
+                       alt={post.data.title}>
+                  <div class="post-image-overlay"></div>
+                </div>
+              )}
+              
+              <div class="post-content">
+                <div class="post-meta">
+                  <span class={`post-tag ${post.data.tag}`}>
+                    {post.data.tag}
+                  </span>
+                  <time class="post-date">
+                    {post.data.pubDate.toLocaleDateString('es-ES')}
+                  </time>
+                </div>
+                
+                <h3 class="post-title">
+                  <a href={`/posts/${post.slug}`}>
+                    {post.data.title}
+                  </a>
+                </h3>
+                
+                <p class="post-description">
+                  {post.data.description}
+                </p>
+                
+                <div class="post-footer">
+                  <span class="post-author">Por {post.data.author}</span>
+                  <a href={`/posts/${post.slug}`} class="post-read-more">
+                    Leer más
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <div class="empty-state-icon">📝</div>
+          <h3>Próximamente...</h3>
+          <p>
+            Estoy preparando contenido increíble para compartir contigo. 
+            ¡Vuelve pronto para descubrir mis primeros escritos!
+          </p>
+        </div>
+      )}
+      
+      {recentPosts.length > 0 && (
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="/posts" class="btn btn-primary">
+            Ver todos los posts
+            <svg style="width: 1.25rem; height: 1.25rem; margin-left: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">
+          ¿Necesitas contenido que conecte?
+        </h2>
+        <p class="cta-description">
+          Especializado en newsletters, LinkedIn posts, pitch corporativos y ebooks 
+          que generan resultados para el sector inmobiliario y empresarial.
+        </p>
+        <div class="cta-buttons">
+          <a href="mailto:alex@horsewriter.com" class="btn btn-white">
+            Contactar para proyectos
+          </a>
+          <a href="/about" class="btn btn-secondary">
+            Conoce más sobre mí
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
