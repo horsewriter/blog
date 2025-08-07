@@ -1,5 +1,7 @@
 /* HorseWriter Blog - Custom Styles */
 
+/* HorseWriter Blog - Custom Styles */
+
 /* CSS Reset and Base Styles */
 * {
   margin: 0;
@@ -15,7 +17,7 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   color: #ffffff;
-  background-color: #1e3a8a;
+  background-color: #0f172a; /* más oscuro */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -23,8 +25,8 @@ body {
 
 /* Color Variables */
 :root {
-  --navy: #1e3a8a;
-  --navy-dark: #1e40af;
+  --navy: #0f172a;  /* darker navy */
+  --navy-dark: #1e293b;  /* darker navy-dark */
   --navy-light: #3b82f6;
   --gray-light: #f8fafc;
   --gray-medium: #e2e8f0;
@@ -41,6 +43,7 @@ body {
   --white: #ffffff;
   --black: #000000;
 }
+
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
