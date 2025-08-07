@@ -33,23 +33,6 @@ const filteredPosts = currentTag
     </div>
   </section>
 
-  <!-- Filter Section -->
-  <section class="filter-section">
-    <div class="container">
-      <div class="filter-buttons">
-        <a href="/posts" 
-           class={`filter-btn ${!currentTag ? 'active' : ''}`}>
-          Todos
-        </a>
-        {allTags.map(tag => (
-          <a href={`/posts?tag=${tag}`}
-             class={`filter-btn ${currentTag === tag ? 'active' : ''}`}>
-            {tag}
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
 
   <!-- Posts Grid -->
   <section class="posts-section">
