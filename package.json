@@ -15,9 +15,7 @@
     "tailwindcss": "^3.4.0",
     "@netlify/blobs": "10.0.8"
   },
-  {
   "overrides": {
-  "@netlify/blobs": "10.0.8"
-}
+    "@netlify/blobs": "10.0.8"
   }
 }
