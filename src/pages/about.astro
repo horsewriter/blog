@@ -2,206 +2,197 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Sobre mí - Alex Mejía | HorseWriter Blog">
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <div style="text-align: center;">
-          <h1 class="hero-title">
-            Sobre <span class="highlight">Alex Mejía</span>
-          </h1>
-          <p class="hero-description">
-            La historia de cómo un desarrollador de software se convirtió en ghostwriter especializado
-          </p>
-        </div>
-      </div>
+<BaseLayout title="About - Alex Mejía" description="Learn about Alex Mejía, writer, chronicler, and storyteller">
+  <!-- Header -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-dark-900 via-dark-950 to-black">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+        About Me
+      </h1>
+      <p class="text-xl text-dark-300 mb-8 max-w-2xl mx-auto">
+        The story behind the stories
+      </p>
     </div>
   </section>
 
   <!-- Main Content -->
-  <section class="posts-section">
-    <div class="container">
-      <div style="max-width: 64rem; margin: 0 auto;">
-        <!-- Personal Story -->
-        <div style="display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 4rem; align-items: center;">
-          <div style="grid-column: span 2;">
-            <h2 style="font-size: 1.875rem; font-weight: 700; color: var(--white); margin-bottom: 1.5rem;">Mi Historia</h2>
-            <div style="color: var(--gray-light); line-height: 1.7;">
-              <p style="margin-bottom: 1.5rem;">
-                A los 26 años, he vivido una transformación profesional fascinante. 
-                Comencé mi carrera en el mundo técnico, especializándome en desarrollo de software 
-                y ciberseguridad durante 5 años. Esta experiencia me enseñó a pensar de manera 
-                estructurada, a resolver problemas complejos y a comunicar conceptos técnicos 
-                de forma clara.
-              </p>
-              
-              <p style="margin-bottom: 1.5rem;">
-                Pero hace 3 años descubrí mi verdadera pasión: las palabras. No cualquier tipo 
-                de escritura, sino aquella que tiene el poder de transformar ideas complejas en 
-                narrativas que conectan, persuaden y convierten. Así nació mi carrera como ghostwriter.
-              </p>
-              
-              <p style="margin-bottom: 1.5rem;">
-                Mi background técnico me ha dado una ventaja única en el mundo del ghostwriting. 
-                Entiendo los productos y servicios complejos, puedo traducir jerga técnica a 
-                lenguaje humano, y sé cómo estructurar información de manera lógica y persuasiva.
-              </p>
-              
-              <p style="margin-bottom: 1.5rem;">
-                Hoy me especializo en crear contenido para clientes inmobiliarios y corporativos: 
-                newsletters que se leen hasta el final, posts de LinkedIn que generan engagement 
-                real, pitch y discursos corporativos que cierran deals, y ebooks que posicionan 
-                a mis clientes como autoridades en su sector.
-              </p>
+  <section class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <!-- Profile Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
+        <div class="lg:col-span-1">
+          <div class="bg-dark-900 rounded-lg p-8 text-center border border-dark-800">
+            <div class="w-32 h-32 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <span class="text-white font-bold text-4xl">AM</span>
             </div>
-          </div>
-          
-          <div style="display: flex; justify-content: center;">
-            <div style="position: relative;">
-              <img src="/assets/images/ghostwriter.jpg" 
-                   alt="Alex Mejía - Ghostwriter" 
-                   style="border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); width: 100%; max-width: 24rem; object-fit: cover; height: 20rem;">
-              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(30, 58, 138, 0.3) 0%, transparent 100%); border-radius: 1rem;"></div>
+            <h2 class="text-2xl font-bold text-white mb-2">Alex Mejía</h2>
+            <p class="text-dark-400 mb-6">Writer • Chronicler • Storyteller</p>
+            
+            <div class="space-y-3 text-sm text-dark-400">
+              <div class="flex items-center justify-center gap-2">
+                <span>📍</span>
+                <span>Based in [Your Location]</span>
+              </div>
+              <div class="flex items-center justify-center gap-2">
+                <span>✍️</span>
+                <span>Writing since [Year]</span>
+              </div>
+              <div class="flex items-center justify-center gap-2">
+                <span>📚</span>
+                <span>Published works: [Number]</span>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- Skills & Expertise -->
-        <div style="margin-bottom: 4rem;">
-          <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Mis Especialidades</h2>
-          <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
-            <div class="experience-card">
-              <h3 style="display: flex; align-items: center; margin-bottom: 1rem;">
-                <span style="font-size: 1.5rem; margin-right: 0.75rem;">📧</span>
-                Newsletters Corporativos
-              </h3>
-              <p>
-                Creo newsletters que tus suscriptores esperan con ansias. Combino storytelling 
-                con datos relevantes para mantener altas tasas de apertura y engagement.
-              </p>
-            </div>
-            
-            <div class="experience-card">
-              <h3 style="display: flex; align-items: center; margin-bottom: 1rem;">
-                <span style="font-size: 1.5rem; margin-right: 0.75rem;">💼</span>
-                Posts para LinkedIn
-              </h3>
-              <p>
-                Desarrollo contenido que posiciona a mis clientes como thought leaders. 
-                Posts que generan conversaciones reales y oportunidades de negocio.
-              </p>
-            </div>
-            
-            <div class="experience-card">
-              <h3 style="display: flex; align-items: center; margin-bottom: 1rem;">
-                <span style="font-size: 1.5rem; margin-right: 0.75rem;">🎯</span>
-                Pitch & Discursos
-              </h3>
-              <p>
-                Estructuro presentaciones y discursos que conectan emocionalmente con la audiencia 
-                y logran los objetivos comerciales específicos de cada cliente.
-              </p>
-            </div>
-            
-            <div class="experience-card">
-              <h3 style="display: flex; align-items: center; margin-bottom: 1rem;">
-                <span style="font-size: 1.5rem; margin-right: 0.75rem;">📚</span>
-                Ebooks Especializados
-              </h3>
-              <p>
-                Creo ebooks que establecen autoridad y generan leads cualificados. 
-                Contenido profundo que aporta valor real y posiciona a mis clientes como expertos.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Philosophy -->
-        <div style="background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%); padding: 2rem; border-radius: 1rem; margin-bottom: 4rem;">
-          <h2 class="section-title" style="text-align: center; margin-bottom: 1.5rem;">Mi Filosofía</h2>
-          <div style="max-width: 48rem; margin: 0 auto; text-align: center;">
-            <p style="font-size: 1.25rem; color: #bfdbfe; line-height: 1.6; margin-bottom: 1.5rem;">
-              "Cada palabra tiene un propósito, cada párrafo una intención, 
-              cada texto una meta específica."
+        
+        <div class="lg:col-span-2">
+          <div class="prose prose-lg prose-invert max-w-none">
+            <h2>My Journey</h2>
+            <p>
+              I've always been fascinated by the power of words to capture the complexity of human experience. 
+              What started as a personal need to make sense of the world through writing has evolved into a 
+              passion for crafting stories that resonate with others who are navigating their own journeys.
             </p>
-            <p style="color: var(--gray-light); line-height: 1.6;">
-              No escribo solo para llenar páginas. Cada pieza de contenido que creo está 
-              diseñada estratégicamente para lograr objetivos específicos: generar leads, 
-              cerrar ventas, construir autoridad o fortalecer relaciones con clientes.
+            
+            <p>
+              My work spans short stories, chronicles of daily life, and reflective essays that explore 
+              themes of memory, identity, connection, and the search for meaning in ordinary moments. 
+              I believe that every person carries stories worth telling, and every moment contains the 
+              seeds of deeper understanding.
             </p>
-          </div>
-        </div>
-
-        <!-- Personal Touch -->
-        <div style="display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center;">
-          <div>
-            <h2 style="font-size: 1.875rem; font-weight: 700; color: var(--white); margin-bottom: 1.5rem;">Más Allá del Trabajo</h2>
-            <div style="color: var(--gray-light); line-height: 1.7;">
-              <p style="margin-bottom: 1rem;">
-                Este blog es mi espacio personal, mi rincón de ideas donde comparto 
-                cuentos, relatos, crónicas y artículos que nacen de mi curiosidad 
-                y experiencias personales.
-              </p>
-              <p style="margin-bottom: 1rem;">
-                Aquí encontrarás una mezcla de reflexiones sobre escritura, tecnología, 
-                y la vida en general. Es mi forma de mantener viva la creatividad y 
-                conectar con otros que comparten la pasión por las palabras.
-              </p>
-              <p style="margin-bottom: 1rem;">
-                Cuando no estoy escribiendo para clientes, me gusta experimentar con 
-                diferentes estilos narrativos y explorar temas que me apasionan.
-              </p>
-            </div>
-          </div>
-          
-          <div style="display: flex; justify-content: center;">
-            <img src="/assets/images/creative-writing.jpg" 
-                 alt="Escritura creativa" 
-                 style="border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); width: 100%; max-width: 28rem; object-fit: cover; height: 16rem;">
+            
+            <h2>My Approach</h2>
+            <p>
+              I write from a place of curiosity rather than certainty, exploring questions rather than 
+              providing answers. My stories often begin with a single image, a fragment of overheard 
+              conversation, or a moment of recognition that feels both deeply personal and universally human.
+            </p>
+            
+            <p>
+              Whether I'm crafting a fictional narrative or chronicling real observations, I'm drawn to 
+              the spaces between what we say and what we mean, between who we are and who we're becoming, 
+              between the stories we tell ourselves and the truths we're still discovering.
+            </p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Contact CTA -->
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-content">
-        <h2 class="cta-title">
-          ¿Trabajamos juntos?
-        </h2>
-        <p class="cta-description">
-          Si necesitas contenido que realmente conecte con tu audiencia y genere resultados, 
-          me encantaría conocer tu proyecto.
+      <!-- Writing Philosophy -->
+      <div class="bg-dark-900 rounded-lg p-8 mb-16 border border-dark-800">
+        <h2 class="text-2xl font-bold text-white mb-6 text-center">Writing Philosophy</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl">🎯</span>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Authenticity</h3>
+            <p class="text-dark-400 text-sm">
+              Every story should ring true to human experience, even when exploring fictional worlds.
+            </p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl">🔍</span>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Observation</h3>
+            <p class="text-dark-400 text-sm">
+              The extraordinary often hides within the ordinary, waiting for careful attention to reveal it.
+            </p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl">🤝</span>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Connection</h3>
+            <p class="text-dark-400 text-sm">
+              Stories are bridges between minds, creating understanding across different experiences.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Projects -->
+      <div class="mb-16">
+        <h2 class="text-2xl font-bold text-white mb-8 text-center">Current Projects</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-dark-900 rounded-lg p-6 border border-dark-800">
+            <h3 class="text-lg font-semibold text-white mb-3">Short Story Collection</h3>
+            <p class="text-dark-400 text-sm mb-4">
+              Working on a collection of interconnected short stories exploring themes of family, 
+              memory, and the stories we inherit from previous generations.
+            </p>
+            <span class="text-xs text-blue-400 bg-blue-600/20 px-2 py-1 rounded">In Progress</span>
+          </div>
+          
+          <div class="bg-dark-900 rounded-lg p-6 border border-dark-800">
+            <h3 class="text-lg font-semibold text-white mb-3">Urban Chronicles</h3>
+            <p class="text-dark-400 text-sm mb-4">
+              A series of observational pieces about city life, capturing the small dramas and 
+              quiet revelations that unfold in public spaces.
+            </p>
+            <span class="text-xs text-green-400 bg-green-600/20 px-2 py-1 rounded">Ongoing</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Influences -->
+      <div class="mb-16">
+        <h2 class="text-2xl font-bold text-white mb-8 text-center">Literary Influences</h2>
+        <div class="bg-dark-900 rounded-lg p-8 border border-dark-800">
+          <p class="text-dark-300 leading-relaxed mb-6">
+            My writing has been shaped by authors who find profound meaning in everyday moments and 
+            who aren't afraid to explore the complexity of human nature. Some writers who have 
+            particularly influenced my approach include:
+          </p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-white font-semibold mb-2">Short Fiction</h3>
+              <ul class="text-dark-400 text-sm space-y-1">
+                <li>• Alice Munro - for her mastery of the short story form</li>
+                <li>• Jorge Luis Borges - for his philosophical depth</li>
+                <li>• Raymond Carver - for his precise, understated prose</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 class="text-white font-semibold mb-2">Essays & Chronicles</h3>
+              <ul class="text-dark-400 text-sm space-y-1">
+                <li>• Joan Didion - for her sharp observational skills</li>
+                <li>• James Baldwin - for his moral clarity and passion</li>
+                <li>• Annie Dillard - for her poetic attention to detail</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact CTA -->
+      <div class="text-center">
+        <h2 class="text-2xl font-bold text-white mb-4">Let's Connect</h2>
+        <p class="text-dark-400 mb-8 max-w-2xl mx-auto">
+          I'm always interested in connecting with fellow writers, readers, and anyone who shares 
+          a passion for storytelling. Whether you want to discuss a story, share feedback, or 
+          explore potential collaborations, I'd love to hear from you.
         </p>
-        <div class="cta-buttons">
-          <a href="mailto:alex@horsewriter.com" class="btn btn-white">
-            📧 alex@horsewriter.com
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/contact" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-dark-950"
+          >
+            Get In Touch
           </a>
-          <a href="https://linkedin.com/in/alexmejia" class="btn btn-secondary">
-            💼 LinkedIn
+          <a 
+            href="/blog" 
+            class="border border-dark-600 hover:border-dark-500 text-dark-300 hover:text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-dark-500 focus:ring-offset-2 focus:ring-offset-dark-950"
+          >
+            Read My Work
           </a>
         </div>
       </div>
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  @media (min-width: 1024px) {
-    .about-grid {
-      grid-template-columns: 2fr 1fr;
-    }
-    
-    .skills-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .personal-grid {
-      grid-template-columns: 2fr 1fr;
-    }
-  }
-</style>
-

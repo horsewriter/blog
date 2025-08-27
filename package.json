@@ -1,5 +1,5 @@
 {
-  "name": "horsewriter-blog",
+  "name": "alex-mejia-portfolio",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.3",
-    "astro": "^5.12.8"
+    "@astrojs/tailwind": "^5.1.2",
+    "astro": "^5.12.8",
+    "tailwindcss": "^3.4.0"
   }
 }

@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all blog posts
+const allPosts = await getCollection('blog');
+const publishedPosts = allPosts
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Get unique categories and tags
+const categories = [...new Set(allPosts.map(post => post.data.category))];
+const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
+
+// Filter posts based on URL parameters
+const url = Astro.url;
+const selectedCategory = url.searchParams.get('category');
+const selectedTag = url.searchParams.get('tag');
+
+let filteredPosts = publishedPosts;
+
+if (selectedCategory) {
+  filteredPosts = filteredPosts.filter(post => post.data.category === selectedCategory);
+}
+
+if (selectedTag) {
+  filteredPosts = filteredPosts.filter(post => post.data.tags.includes(selectedTag));
+}
+---
+
+<BaseLayout title="Blog - Alex Mejía" description="Short stories, chronicles, essays, and reflections by Alex Mejía">
+  <!-- Header -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-dark-900 via-dark-950 to-black">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+        My Writing
+      </h1>
+      <p class="text-xl text-dark-300 mb-8 max-w-2xl mx-auto">
+        Stories, chronicles, and reflections exploring the human experience
+      </p>
+      
+      <!-- Filter Buttons -->
+      <div class="flex flex-wrap justify-center gap-2 mb-8">
+        <a 
+          href="/blog" 
+          class={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            !selectedCategory && !selectedTag 
+              ? 'bg-blue-600 text-white' 
+              : 'bg-dark-800 text-dark-300 hover:bg-dark-700 hover:text-white'
+          }`}
+        >
+          All
+        </a>
+        {categories.map((category) => (
+          <a 
+            href={`/blog?category=${category}`}
+            class={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 capitalize ${
+              selectedCategory === category 
+                ? 'bg-blue-600 text-white' 
+                : 'bg-dark-800 text-dark-300 hover:bg-dark-700 hover:text-white'
+            }`}
+          >
+            {category.replace('-', ' ')}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Posts Grid -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+      {filteredPosts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredPosts.map((post) => (
+            <article class="bg-dark-900 rounded-lg overflow-hidden border border-dark-800 hover:border-dark-700 transition-all duration-200 transform hover:scale-105 group">
+              <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="inline-block px-3 py-1 text-xs font-medium bg-blue-600/20 text-blue-400 rounded-full capitalize">
+                    {post.data.category.replace('-', ' ')}
+                  </span>
+                  <time class="text-sm text-dark-500">
+                    {post.data.pubDate.toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}
+                  </time>
+                </div>
+                
+                <h2 class="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors duration-200">
+                  <a href={`/blog/${post.slug}`} class="hover:underline">
+                    {post.data.title}
+                  </a>
+                </h2>
+                
+                <p class="text-dark-400 text-sm leading-relaxed mb-4">
+                  {post.data.description}
+                </p>
+                
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-xs text-dark-500">By {post.data.author}</span>
+                  {post.data.featured && (
+                    <span class="text-xs text-yellow-400 bg-yellow-400/20 px-2 py-1 rounded">
+                      Featured
+                    </span>
+                  )}
+                </div>
+                
+                {post.data.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    {post.data.tags.slice(0, 3).map((tag) => (
+                      <a 
+                        href={`/blog?tag=${tag}`}
+                        class="text-xs text-dark-500 hover:text-blue-400 bg-dark-800 hover:bg-dark-700 px-2 py-1 rounded transition-colors duration-200"
+                      >
+                        #{tag}
+                      </a>
+                    ))}
+                  </div>
+                )}
+                
+                <a 
+                  href={`/blog/${post.slug}`}
+                  class="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200"
+                >
+                  Read more 
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-20">
+          <div class="w-24 h-24 bg-dark-800 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-4xl">📝</span>
+          </div>
+          <h2 class="text-2xl font-semibold text-white mb-4">No posts found</h2>
+          <p class="text-dark-400 mb-8">
+            {selectedCategory || selectedTag 
+              ? `No posts match the selected ${selectedCategory ? 'category' : 'tag'}.`
+              : 'No posts have been published yet.'
+            }
+          </p>
+          <a 
+            href="/blog" 
+            class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200"
+          >
+            View All Posts
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Tags Cloud -->
+  {allTags.length > 0 && (
+    <section class="py-20 px-4 sm:px-6 lg:px-8 bg-dark-900/50">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-2xl font-semibold text-white mb-8">Explore by Topic</h2>
+        <div class="flex flex-wrap justify-center gap-3">
+          {allTags.map((tag) => (
+            <a 
+              href={`/blog?tag=${tag}`}
+              class="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-full text-sm font-medium transition-all duration-200 transform hover:scale-105"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>

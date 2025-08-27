@@ -1,0 +1,161 @@
+---
+// This component handles client-side authentication check
+---
+
+<div id="auth-guard" class="hidden">
+  <div class="min-h-screen bg-dark-950 flex items-center justify-center px-4">
+    <div class="max-w-md w-full">
+      <div class="text-center mb-8 animate-fade-in">
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 font-hack">
+          Alex Mejía
+        </h1>
+        <p class="text-dark-400 text-sm md:text-base">
+          Writer • Chronicler • Storyteller
+        </p>
+      </div>
+      
+      <div class="bg-dark-900 rounded-lg p-6 md:p-8 shadow-2xl border border-dark-800 animate-slide-up">
+        <div class="text-center mb-6">
+          <div class="w-16 h-16 bg-dark-800 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">🔒</span>
+          </div>
+          <h2 class="text-xl md:text-2xl font-semibold text-white mb-2 font-hack">
+            Protected Content
+          </h2>
+          <p class="text-dark-400 text-sm md:text-base">
+            Enter password to access the portfolio
+          </p>
+        </div>
+        
+        <form id="auth-form" class="space-y-4">
+          <div>
+            <input
+              type="password"
+              id="password-input"
+              placeholder="Enter password"
+              class="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-white placeholder-dark-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-hack text-sm md:text-base"
+              autocomplete="current-password"
+            />
+          </div>
+          
+          <button
+            type="submit"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-dark-900 font-hack text-sm md:text-base"
+          >
+            Access Portfolio
+          </button>
+          
+          <div id="error-message" class="hidden text-red-400 text-sm text-center font-hack">
+            Incorrect password. Please try again.
+          </div>
+        </form>
+        
+        <!-- Admin Toggle (hidden by default) -->
+        <div class="mt-6 pt-6 border-t border-dark-800">
+          <button
+            id="admin-toggle-btn"
+            class="text-xs text-dark-500 hover:text-dark-400 transition-colors duration-200 font-hack"
+            onclick="toggleAdminPanel()"
+          >
+            Admin
+          </button>
+          
+          <div id="admin-panel" class="hidden mt-4 p-4 bg-dark-800 rounded-lg">
+            <h3 class="text-sm font-semibold text-white mb-3 font-hack">Admin Panel</h3>
+            <div class="space-y-2">
+              <button
+                onclick="toggleProtection(false)"
+                class="block w-full text-left px-3 py-2 text-xs text-green-400 hover:bg-dark-700 rounded transition-colors duration-200 font-hack"
+              >
+                Disable Password Protection
+              </button>
+              <button
+                onclick="toggleProtection(true)"
+                class="block w-full text-left px-3 py-2 text-xs text-red-400 hover:bg-dark-700 rounded transition-colors duration-200 font-hack"
+              >
+                Enable Password Protection
+              </button>
+              <button
+                onclick="logout()"
+                class="block w-full text-left px-3 py-2 text-xs text-yellow-400 hover:bg-dark-700 rounded transition-colors duration-200 font-hack"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { isAuthenticated, authenticate, logout, toggleProtection, isProtectionEnabled } from '../config/auth.ts';
+  
+  // Check authentication on page load
+  function checkAuth() {
+    const authGuard = document.getElementById('auth-guard');
+    const mainContent = document.getElementById('main-content');
+    
+    if (!authGuard || !mainContent) return;
+    
+    if (isAuthenticated()) {
+      authGuard.classList.add('hidden');
+      mainContent.classList.remove('hidden');
+    } else {
+      authGuard.classList.remove('hidden');
+      mainContent.classList.add('hidden');
+    }
+  }
+  
+  // Handle form submission
+  document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+    
+    const form = document.getElementById('auth-form');
+    const passwordInput = document.getElementById('password-input');
+    const errorMessage = document.getElementById('error-message');
+    
+    if (form && passwordInput && errorMessage) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const password = (passwordInput as HTMLInputElement).value;
+        
+        if (authenticate(password)) {
+          checkAuth();
+        } else {
+          errorMessage.classList.remove('hidden');
+          passwordInput.classList.add('border-red-500');
+          
+          setTimeout(() => {
+            errorMessage.classList.add('hidden');
+            passwordInput.classList.remove('border-red-500');
+          }, 3000);
+        }
+        
+        (passwordInput as HTMLInputElement).value = '';
+      });
+    }
+  });
+  
+  // Global functions for admin panel
+  window.toggleAdminPanel = function() {
+    const panel = document.getElementById('admin-panel');
+    if (panel) {
+      panel.classList.toggle('hidden');
+    }
+  };
+  
+  window.toggleProtection = function(enabled: boolean) {
+    toggleProtection(enabled);
+    alert(enabled ? 'Password protection enabled' : 'Password protection disabled');
+    if (!enabled) {
+      checkAuth();
+    }
+  };
+  
+  window.logout = function() {
+    logout();
+    checkAuth();
+  };
+</script>

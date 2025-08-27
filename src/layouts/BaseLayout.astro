@@ -2,122 +2,351 @@
 export interface Props {
   title: string;
   description?: string;
+  image?: string;
 }
 
-const { title, description = "HorseWriter Blog - El rincón de ideas de Alex Mejía" } = Astro.props;
+const { title, description = "Alex Mejía - Writer, Chronicler, Storyteller", image } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
   <meta name="description" content={description}>
+  <link rel="canonical" href={canonicalURL}>
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={canonicalURL}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  {image && <meta property="og:image" content={new URL(image, Astro.url)}>}
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content={canonicalURL}>
+  <meta property="twitter:title" content={title}>
+  <meta property="twitter:description" content={description}>
+  {image && <meta property="twitter:image" content={new URL(image, Astro.url)}>}
+  
+  <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   
-  <!-- Custom Styles -->
-  <link rel="stylesheet" href="/styles.css">
-  
-  <!-- Google Fonts -->
+  <!-- Nerd Fonts - Hack -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hack:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="Alex Mejía - RSS Feed" href="/rss.xml">
 </head>
 
-<body>
-  <!-- Header -->
-  <header>
-    <nav class="container">
-      <div class="nav-container">
-        <div class="nav-brand">
-          <a href="/">HorseWriter</a>
-          <span class="hidden-mobile">Blog</span>
-        </div>
-        
-        <div class="nav-links">
-          <a href="/">Inicio</a>
-          <a href="/posts">Posts</a>
-          <a href="/about">Sobre mí</a>
-        </div>
-        
-        <!-- Mobile menu button -->
-        <button id="mobile-menu-btn" class="mobile-menu-btn">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
-      </div>
-      
-      <!-- Mobile menu -->
-      <div id="mobile-menu" class="mobile-menu">
-        <div class="mobile-menu-links">
-          <a href="/">Inicio</a>
-          <a href="/posts">Posts</a>
-          <a href="/about">Sobre mí</a>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <!-- Main Content -->
-  <main>
-    <slot />
-  </main>
-
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-grid">
-          <div class="footer-section">
-            <h3>Alex Mejía</h3>
-            <p>
-              Ghostwriter especializado en contenido inmobiliario y corporativo. 
-              5 años en desarrollo de software y ciberseguridad, 3 años creando contenido que conecta.
+<body class="bg-dark-950 text-white font-hack antialiased">
+  <!-- Auth Guard Component -->
+  <div id="auth-wrapper">
+    <div id="auth-guard" class="hidden">
+      <div class="min-h-screen bg-dark-950 flex items-center justify-center px-4">
+        <div class="max-w-md w-full">
+          <div class="text-center mb-8 animate-fade-in">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
+              Alex Mejía
+            </h1>
+            <p class="text-dark-400 text-sm md:text-base">
+              Writer • Chronicler • Storyteller
             </p>
           </div>
           
-          <div class="footer-section">
-            <h3>Servicios</h3>
-            <ul>
-              <li>• Newsletter corporativos</li>
-              <li>• Posts para LinkedIn</li>
-              <li>• Pitch & discursos corporativos</li>
-              <li>• Ebooks especializados</li>
-            </ul>
-          </div>
-          
-          <div class="footer-section">
-            <h3>Contacto</h3>
-            <div>
-              <p>📧 alex@horsewriter.com</p>
-              <p>💼 LinkedIn: /in/alexmejia</p>
-              <p>🌐 Disponible para proyectos</p>
+          <div class="bg-dark-900 rounded-lg p-6 md:p-8 shadow-2xl border border-dark-800 animate-slide-up">
+            <div class="text-center mb-6">
+              <div class="w-16 h-16 bg-dark-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-2xl">🔒</span>
+              </div>
+              <h2 class="text-xl md:text-2xl font-semibold text-white mb-2">
+                Protected Content
+              </h2>
+              <p class="text-dark-400 text-sm md:text-base">
+                Enter password to access the portfolio
+              </p>
+            </div>
+            
+            <form id="auth-form" class="space-y-4">
+              <div>
+                <input
+                  type="password"
+                  id="password-input"
+                  placeholder="Enter password"
+                  class="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-white placeholder-dark-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm md:text-base"
+                  autocomplete="current-password"
+                />
+              </div>
+              
+              <button
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-dark-900 text-sm md:text-base"
+              >
+                Access Portfolio
+              </button>
+              
+              <div id="error-message" class="hidden text-red-400 text-sm text-center">
+                Incorrect password. Please try again.
+              </div>
+            </form>
+            
+            <!-- Admin Toggle -->
+            <div class="mt-6 pt-6 border-t border-dark-800">
+              <button
+                id="admin-toggle-btn"
+                class="text-xs text-dark-500 hover:text-dark-400 transition-colors duration-200"
+                onclick="toggleAdminPanel()"
+              >
+                Admin
+              </button>
+              
+              <div id="admin-panel" class="hidden mt-4 p-4 bg-dark-800 rounded-lg">
+                <h3 class="text-sm font-semibold text-white mb-3">Admin Panel</h3>
+                <div class="space-y-2">
+                  <button
+                    onclick="toggleProtection(false)"
+                    class="block w-full text-left px-3 py-2 text-xs text-green-400 hover:bg-dark-700 rounded transition-colors duration-200"
+                  >
+                    Disable Password Protection
+                  </button>
+                  <button
+                    onclick="toggleProtection(true)"
+                    class="block w-full text-left px-3 py-2 text-xs text-red-400 hover:bg-dark-700 rounded transition-colors duration-200"
+                  >
+                    Enable Password Protection
+                  </button>
+                  <button
+                    onclick="logout()"
+                    class="block w-full text-left px-3 py-2 text-xs text-yellow-400 hover:bg-dark-700 rounded transition-colors duration-200"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        
-        <div class="footer-bottom">
-          <p>© 2024 HorseWriter Blog. Creado con pasión por las palabras.</p>
-        </div>
       </div>
     </div>
-  </footer>
+    
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+      <!-- Navigation -->
+      <nav class="sticky top-0 z-50 bg-dark-950/95 backdrop-blur-sm border-b border-dark-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+              <a href="/" class="text-xl font-bold text-white hover:text-blue-400 transition-colors duration-200">
+                Alex Mejía
+              </a>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:block">
+              <div class="ml-10 flex items-baseline space-x-8">
+                <a href="/" class="text-dark-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200">Home</a>
+                <a href="/blog" class="text-dark-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200">Blog</a>
+                <a href="/quotes" class="text-dark-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200">Quotes</a>
+                <a href="/about" class="text-dark-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200">About</a>
+                <a href="/contact" class="text-dark-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200">Contact</a>
+              </div>
+            </div>
+            
+            <!-- Mobile menu button -->
+            <div class="md:hidden">
+              <button
+                id="mobile-menu-button"
+                class="text-dark-400 hover:text-white focus:outline-none focus:text-white p-2"
+                aria-label="Toggle menu"
+              >
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Mobile Navigation -->
+          <div id="mobile-menu" class="hidden md:hidden pb-4">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+              <a href="/" class="text-dark-300 hover:text-white block px-3 py-2 text-base font-medium transition-colors duration-200">Home</a>
+              <a href="/blog" class="text-dark-300 hover:text-white block px-3 py-2 text-base font-medium transition-colors duration-200">Blog</a>
+              <a href="/quotes" class="text-dark-300 hover:text-white block px-3 py-2 text-base font-medium transition-colors duration-200">Quotes</a>
+              <a href="/about" class="text-dark-300 hover:text-white block px-3 py-2 text-base font-medium transition-colors duration-200">About</a>
+              <a href="/contact" class="text-dark-300 hover:text-white block px-3 py-2 text-base font-medium transition-colors duration-200">Contact</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <!-- Main Content Slot -->
+      <main class="min-h-screen">
+        <slot />
+      </main>
+      
+      <!-- Footer -->
+      <footer class="bg-dark-900 border-t border-dark-800 mt-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="col-span-1 md:col-span-2">
+              <h3 class="text-lg font-semibold text-white mb-4">Alex Mejía</h3>
+              <p class="text-dark-400 text-sm leading-relaxed max-w-md">
+                Writer, chronicler, and storyteller crafting narratives that explore the human condition 
+                through short stories, chronicles, and thoughtful observations.
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="text-lg font-semibold text-white mb-4">Connect</h3>
+              <div class="space-y-2">
+                <a href="/contact" class="text-dark-400 hover:text-white text-sm transition-colors duration-200 block">Contact</a>
+                <a href="/rss.xml" class="text-dark-400 hover:text-white text-sm transition-colors duration-200 block">RSS Feed</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-8 pt-8 border-t border-dark-800 text-center">
+            <p class="text-dark-500 text-sm">
+              © {new Date().getFullYear()} Alex Mejía. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
 
-  <!-- Mobile menu toggle script -->
+  <!-- Authentication Script -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    // Import auth functions
+    const AUTH_CONFIG = {
+      PASSWORD: 'writer2024',
+      PROTECTION_ENABLED: true,
+      SESSION_KEY: 'alex_mejia_auth',
+      ADMIN_TOGGLE_KEY: 'alex_mejia_admin_toggle'
+    };
+
+    function simpleHash(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return Math.abs(hash).toString(36);
+    }
+
+    function isAuthenticated() {
+      const adminToggle = sessionStorage.getItem(AUTH_CONFIG.ADMIN_TOGGLE_KEY);
+      if (adminToggle === 'disabled') return true;
+      if (!AUTH_CONFIG.PROTECTION_ENABLED) return true;
+      const session = sessionStorage.getItem(AUTH_CONFIG.SESSION_KEY);
+      return session === 'authenticated';
+    }
+
+    function authenticate(password) {
+      const hashedInput = simpleHash(password);
+      const hashedPassword = simpleHash(AUTH_CONFIG.PASSWORD);
+      if (hashedInput === hashedPassword) {
+        sessionStorage.setItem(AUTH_CONFIG.SESSION_KEY, 'authenticated');
+        return true;
+      }
+      return false;
+    }
+
+    function logout() {
+      sessionStorage.removeItem(AUTH_CONFIG.SESSION_KEY);
+    }
+
+    function toggleProtection(enabled) {
+      if (enabled) {
+        sessionStorage.removeItem(AUTH_CONFIG.ADMIN_TOGGLE_KEY);
+      } else {
+        sessionStorage.setItem(AUTH_CONFIG.ADMIN_TOGGLE_KEY, 'disabled');
+      }
+    }
+
+    // Check authentication on page load
+    function checkAuth() {
+      const authGuard = document.getElementById('auth-guard');
+      const mainContent = document.getElementById('main-content');
+      
+      if (!authGuard || !mainContent) return;
+      
+      if (isAuthenticated()) {
+        authGuard.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+      } else {
+        authGuard.classList.remove('hidden');
+        mainContent.classList.add('hidden');
+      }
+    }
+
+    // Initialize on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      
+      // Auth form handling
+      const form = document.getElementById('auth-form');
+      const passwordInput = document.getElementById('password-input');
+      const errorMessage = document.getElementById('error-message');
+      
+      if (form && passwordInput && errorMessage) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const password = passwordInput.value;
+          
+          if (authenticate(password)) {
+            checkAuth();
+          } else {
+            errorMessage.classList.remove('hidden');
+            passwordInput.classList.add('border-red-500');
+            
+            setTimeout(() => {
+              errorMessage.classList.add('hidden');
+              passwordInput.classList.remove('border-red-500');
+            }, 3000);
+          }
+          
+          passwordInput.value = '';
+        });
+      }
+      
+      // Mobile menu toggle
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
       const mobileMenu = document.getElementById('mobile-menu');
       
-      if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', function() {
-          mobileMenu.classList.toggle('show');
+      if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
         });
       }
     });
+
+    // Global functions for admin panel
+    window.toggleAdminPanel = function() {
+      const panel = document.getElementById('admin-panel');
+      if (panel) {
+        panel.classList.toggle('hidden');
+      }
+    };
+
+    window.toggleProtection = function(enabled) {
+      toggleProtection(enabled);
+      alert(enabled ? 'Password protection enabled' : 'Password protection disabled');
+      if (!enabled) {
+        checkAuth();
+      }
+    };
+
+    window.logout = function() {
+      logout();
+      checkAuth();
+    };
   </script>
 </body>
 </html>
-

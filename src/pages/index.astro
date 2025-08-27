@@ -2,191 +2,256 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
+// Get featured blog posts
+const allPosts = await getCollection('blog');
+const featuredPosts = allPosts
+  .filter(post => !post.data.draft && post.data.featured)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
 // Get recent posts
-const allPosts = await getCollection('posts');
 const recentPosts = allPosts
   .filter(post => !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+  .slice(0, 6);
 ---
 
-<BaseLayout title="HorseWriter Blog - Alex Mejía">
+<BaseLayout title="Alex Mejía - Writer, Chronicler, Storyteller">
   <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-grid">
-          <div class="hero-text">
-            <h1 class="hero-title">
-              Hola, soy <span class="highlight">Alex Mejía</span>
-            </h1>
-            <p class="hero-description">
-              Ghostwriter especializado en contenido inmobiliario y corporativo. 
-              Transformo ideas complejas en narrativas que conectan y convierten.
-            </p>
-            <div class="hero-buttons">
-              <a href="/posts" class="btn btn-primary">
-                Ver mis escritos
-              </a>
-              <a href="/about" class="btn btn-secondary">
-                Conoce mi historia
-              </a>
-            </div>
-          </div>
-          
-          <div class="hero-image">
-            <div class="hero-image-wrapper">
-              <img src="/assets/images/elegant-writing.jpg" 
-                   alt="Escritura elegante">
-              <div class="hero-image-overlay"></div>
-            </div>
-          </div>
+  <section class="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div class="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-950 to-black opacity-50"></div>
+    
+    <div class="relative z-10 max-w-4xl mx-auto text-center">
+      <div class="animate-fade-in">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+          Alex <span class="text-blue-400">Mejía</span>
+        </h1>
+        
+        <p class="text-xl sm:text-2xl md:text-3xl text-dark-300 mb-8 leading-relaxed">
+          Writer • Chronicler • Storyteller
+        </p>
+        
+        <p class="text-base sm:text-lg md:text-xl text-dark-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+          Crafting narratives that explore the human condition through short stories, 
+          chronicles, and thoughtful observations about life, memory, and connection.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a 
+            href="/blog" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-dark-950 w-full sm:w-auto text-center"
+          >
+            Read My Stories
+          </a>
+          <a 
+            href="/about" 
+            class="border border-dark-600 hover:border-dark-500 text-dark-300 hover:text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-dark-500 focus:ring-offset-2 focus:ring-offset-dark-950 w-full sm:w-auto text-center"
+          >
+            About Me
+          </a>
         </div>
+      </div>
+    </div>
+    
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-pulse-subtle">
+      <div class="w-6 h-10 border-2 border-dark-600 rounded-full flex justify-center">
+        <div class="w-1 h-3 bg-dark-600 rounded-full mt-2 animate-pulse"></div>
       </div>
     </div>
   </section>
 
-  <!-- Experience Section -->
-  <section class="experience-section">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Mi Experiencia</h2>
-        <p class="section-description">
-          Una combinación única de habilidades técnicas y creatividad narrativa
-        </p>
-      </div>
-      
-      <div class="experience-grid">
-        <div class="experience-card">
-          <div class="experience-icon">💻</div>
-          <h3>Desarrollo & Ciberseguridad</h3>
-          <p>
-            5 años de experiencia en desarrollo de software y ciberseguridad, 
-            proporcionando una base técnica sólida para entender productos complejos.
+  <!-- Featured Posts Section -->
+  {featuredPosts.length > 0 && (
+    <section class="py-20 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Featured Stories</h2>
+          <p class="text-lg text-dark-400 max-w-2xl mx-auto">
+            A selection of my most recent and notable works
           </p>
         </div>
         
-        <div class="experience-card">
-          <div class="experience-icon">✍️</div>
-          <h3>Ghostwriting Especializado</h3>
-          <p>
-            3 años creando contenido para clientes inmobiliarios y corporativos, 
-            desde newsletters hasta ebooks que generan resultados.
-          </p>
-        </div>
-        
-        <div class="experience-card">
-          <div class="experience-icon">🎯</div>
-          <h3>Contenido que Convierte</h3>
-          <p>
-            Especializado en LinkedIn posts, pitch corporativos y discursos 
-            que conectan con audiencias específicas y generan engagement.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Recent Posts Section -->
-  <section class="posts-section">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Últimos Escritos</h2>
-        <p class="section-description">
-          Mi rincón de ideas donde comparto cuentos, relatos, crónicas y artículos
-        </p>
-      </div>
-      
-      {recentPosts.length > 0 ? (
-        <div class="posts-grid">
-          {recentPosts.map((post) => (
-            <article class="post-card">
-              {post.data.image && (
-                <div class="post-image">
-                  <img src={post.data.image} 
-                       alt={post.data.title}>
-                  <div class="post-image-overlay"></div>
-                </div>
-              )}
-              
-              <div class="post-content">
-                <div class="post-meta">
-                  <span class={`post-tag ${post.data.tag}`}>
-                    {post.data.tag}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredPosts.map((post) => (
+            <article class="bg-dark-900 rounded-lg overflow-hidden border border-dark-800 hover:border-dark-700 transition-all duration-200 transform hover:scale-105 group">
+              <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="inline-block px-3 py-1 text-xs font-medium bg-blue-600/20 text-blue-400 rounded-full">
+                    {post.data.category.replace('-', ' ')}
                   </span>
-                  <time class="post-date">
-                    {post.data.pubDate.toLocaleDateString('es-ES')}
+                  <time class="text-sm text-dark-500">
+                    {post.data.pubDate.toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}
                   </time>
                 </div>
                 
-                <h3 class="post-title">
-                  <a href={`/posts/${post.slug}`}>
+                <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors duration-200">
+                  <a href={`/blog/${post.slug}`} class="hover:underline">
                     {post.data.title}
                   </a>
                 </h3>
                 
-                <p class="post-description">
+                <p class="text-dark-400 text-sm leading-relaxed mb-4">
                   {post.data.description}
                 </p>
                 
-                <div class="post-footer">
-                  <span class="post-author">Por {post.data.author}</span>
-                  <a href={`/posts/${post.slug}`} class="post-read-more">
-                    Leer más
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-dark-500">By {post.data.author}</span>
+                  <a 
+                    href={`/blog/${post.slug}`}
+                    class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200"
+                  >
+                    Read more →
                   </a>
                 </div>
               </div>
             </article>
           ))}
         </div>
-      ) : (
-        <div class="empty-state">
-          <div class="empty-state-icon">📝</div>
-          <h3>Próximamente...</h3>
-          <p>
-            Estoy preparando contenido increíble para compartir contigo. 
-            ¡Vuelve pronto para descubrir mis primeros escritos!
+      </div>
+    </section>
+  )}
+
+  <!-- About Preview Section -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-dark-900/50">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-8">About My Work</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div class="p-6">
+          <div class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">📖</span>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2">Short Stories</h3>
+          <p class="text-dark-400 text-sm leading-relaxed">
+            Intimate narratives exploring human relationships, memory, and the moments that define us.
           </p>
         </div>
-      )}
-      
-      {recentPosts.length > 0 && (
-        <div style="text-align: center; margin-top: 3rem;">
-          <a href="/posts" class="btn btn-primary">
-            Ver todos los posts
-            <svg style="width: 1.25rem; height: 1.25rem; margin-left: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-            </svg>
-          </a>
+        
+        <div class="p-6">
+          <div class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">📝</span>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2">Chronicles</h3>
+          <p class="text-dark-400 text-sm leading-relaxed">
+            Observational pieces about daily life, capturing the extraordinary in ordinary moments.
+          </p>
         </div>
-      )}
+        
+        <div class="p-6">
+          <div class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">💭</span>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2">Reflections</h3>
+          <p class="text-dark-400 text-sm leading-relaxed">
+            Essays and thoughts on writing, creativity, and the craft of storytelling.
+          </p>
+        </div>
+      </div>
+      
+      <a 
+        href="/about" 
+        class="inline-block bg-dark-800 hover:bg-dark-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-dark-600 focus:ring-offset-2 focus:ring-offset-dark-950"
+      >
+        Learn More About Me
+      </a>
     </div>
   </section>
 
-  <!-- CTA Section -->
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-content">
-        <h2 class="cta-title">
-          ¿Necesitas contenido que conecte?
-        </h2>
-        <p class="cta-description">
-          Especializado en newsletters, LinkedIn posts, pitch corporativos y ebooks 
-          que generan resultados para el sector inmobiliario y empresarial.
-        </p>
-        <div class="cta-buttons">
-          <a href="mailto:alex@horsewriter.com" class="btn btn-white">
-            Contactar para proyectos
-          </a>
-          <a href="/about" class="btn btn-secondary">
-            Conoce más sobre mí
+  <!-- Recent Posts Section -->
+  {recentPosts.length > 0 && (
+    <section class="py-20 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Recent Writing</h2>
+          <p class="text-lg text-dark-400 max-w-2xl mx-auto">
+            Latest stories, chronicles, and reflections from my writing journey
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {recentPosts.map((post) => (
+            <article class="bg-dark-900 rounded-lg p-6 border border-dark-800 hover:border-dark-700 transition-all duration-200 group">
+              <div class="flex items-center justify-between mb-4">
+                <span class="inline-block px-3 py-1 text-xs font-medium bg-blue-600/20 text-blue-400 rounded-full">
+                  {post.data.category.replace('-', ' ')}
+                </span>
+                <time class="text-sm text-dark-500">
+                  {post.data.pubDate.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                  })}
+                </time>
+              </div>
+              
+              <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors duration-200">
+                <a href={`/blog/${post.slug}`} class="hover:underline">
+                  {post.data.title}
+                </a>
+              </h3>
+              
+              <p class="text-dark-400 text-sm leading-relaxed mb-4">
+                {post.data.description}
+              </p>
+              
+              <div class="flex items-center justify-between">
+                <div class="flex flex-wrap gap-2">
+                  {post.data.tags.slice(0, 2).map((tag) => (
+                    <span class="text-xs text-dark-500 bg-dark-800 px-2 py-1 rounded">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <a 
+                  href={`/blog/${post.slug}`}
+                  class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200"
+                >
+                  Read more →
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+        
+        <div class="text-center mt-12">
+          <a 
+            href="/blog" 
+            class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-dark-950"
+          >
+            View All Posts
           </a>
         </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Newsletter/Contact CTA -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-900/20 to-purple-900/20">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Stay Connected</h2>
+      <p class="text-lg text-dark-400 mb-8 max-w-2xl mx-auto">
+        Interested in my writing? Get in touch to discuss projects, collaborations, or just to share thoughts about storytelling.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a 
+          href="/contact" 
+          class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-dark-950 w-full sm:w-auto text-center"
+        >
+          Get In Touch
+        </a>
+        <a 
+          href="/quotes" 
+          class="border border-dark-600 hover:border-dark-500 text-dark-300 hover:text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-dark-500 focus:ring-offset-2 focus:ring-offset-dark-950 w-full sm:w-auto text-center"
+        >
+          Browse Quotes
+        </a>
       </div>
     </div>
   </section>
 </BaseLayout>
-

@@ -1,0 +1,266 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+
+const post = Astro.props;
+const { Content } = await post.render();
+
+// Get related posts (same category, excluding current post)
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter(p => 
+    p.data.category === post.data.category && 
+    p.slug !== post.slug && 
+    !p.data.draft
+  )
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout 
+  title={`${post.data.title} - Alex Mejía`} 
+  description={post.data.description}
+  image={post.data.image}
+>
+  <!-- Article Header -->
+  <article class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <!-- Back to blog link -->
+      <div class="mb-8">
+        <a 
+          href="/blog" 
+          class="inline-flex items-center text-dark-400 hover:text-white text-sm font-medium transition-colors duration-200"
+        >
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Back to Blog
+        </a>
+      </div>
+      
+      <!-- Article Meta -->
+      <header class="mb-12 text-center">
+        <div class="flex items-center justify-center gap-4 mb-6">
+          <span class="inline-block px-4 py-2 text-sm font-medium bg-blue-600/20 text-blue-400 rounded-full capitalize">
+            {post.data.category.replace('-', ' ')}
+          </span>
+          {post.data.featured && (
+            <span class="inline-block px-4 py-2 text-sm font-medium bg-yellow-400/20 text-yellow-400 rounded-full">
+              Featured
+            </span>
+          )}
+        </div>
+        
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+          {post.data.title}
+        </h1>
+        
+        <p class="text-lg sm:text-xl text-dark-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          {post.data.description}
+        </p>
+        
+        <div class="flex items-center justify-center gap-6 text-sm text-dark-500">
+          <div class="flex items-center gap-2">
+            <span>By</span>
+            <span class="text-white font-medium">{post.data.author}</span>
+          </div>
+          <div class="w-1 h-1 bg-dark-600 rounded-full"></div>
+          <time>
+            {post.data.pubDate.toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}
+          </time>
+          {post.data.updatedDate && (
+            <>
+              <div class="w-1 h-1 bg-dark-600 rounded-full"></div>
+              <span>
+                Updated {post.data.updatedDate.toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </span>
+            </>
+          )}
+        </div>
+      </header>
+      
+      <!-- Article Content -->
+      <div class="prose prose-lg prose-invert max-w-none">
+        <Content />
+      </div>
+      
+      <!-- Tags -->
+      {post.data.tags.length > 0 && (
+        <div class="mt-12 pt-8 border-t border-dark-800">
+          <h3 class="text-lg font-semibold text-white mb-4">Tags</h3>
+          <div class="flex flex-wrap gap-2">
+            {post.data.tags.map((tag) => (
+              <a 
+                href={`/blog?tag=${tag}`}
+                class="px-3 py-1 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-full text-sm font-medium transition-all duration-200"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      <!-- Author Bio -->
+      <div class="mt-12 pt-8 border-t border-dark-800">
+        <div class="flex items-start gap-4">
+          <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <span class="text-white font-bold text-lg">AM</span>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-white mb-2">Alex Mejía</h3>
+            <p class="text-dark-400 text-sm leading-relaxed mb-4">
+              Writer, chronicler, and storyteller crafting narratives that explore the human condition. 
+              Passionate about finding the extraordinary in ordinary moments and connecting with readers 
+              through authentic, thoughtful prose.
+            </p>
+            <div class="flex gap-4">
+              <a 
+                href="/about" 
+                class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200"
+              >
+                More about me →
+              </a>
+              <a 
+                href="/contact" 
+                class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200"
+              >
+                Get in touch →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Posts -->
+  {relatedPosts.length > 0 && (
+    <section class="py-20 px-4 sm:px-6 lg:px-8 bg-dark-900/50">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-12 text-center">
+          More {post.data.category.replace('-', ' ')}s
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {relatedPosts.map((relatedPost) => (
+            <article class="bg-dark-900 rounded-lg overflow-hidden border border-dark-800 hover:border-dark-700 transition-all duration-200 transform hover:scale-105 group">
+              <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="inline-block px-3 py-1 text-xs font-medium bg-blue-600/20 text-blue-400 rounded-full capitalize">
+                    {relatedPost.data.category.replace('-', ' ')}
+                  </span>
+                  <time class="text-sm text-dark-500">
+                    {relatedPost.data.pubDate.toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}
+                  </time>
+                </div>
+                
+                <h3 class="text-lg font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors duration-200">
+                  <a href={`/blog/${relatedPost.slug}`} class="hover:underline">
+                    {relatedPost.data.title}
+                  </a>
+                </h3>
+                
+                <p class="text-dark-400 text-sm leading-relaxed mb-4">
+                  {relatedPost.data.description}
+                </p>
+                
+                <a 
+                  href={`/blog/${relatedPost.slug}`}
+                  class="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200"
+                >
+                  Read more 
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .prose {
+    @apply text-dark-200;
+  }
+  
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    @apply text-white font-bold;
+  }
+  
+  .prose h2 {
+    @apply text-2xl mt-12 mb-6;
+  }
+  
+  .prose h3 {
+    @apply text-xl mt-8 mb-4;
+  }
+  
+  .prose p {
+    @apply mb-6 leading-relaxed;
+  }
+  
+  .prose a {
+    @apply text-blue-400 hover:text-blue-300 transition-colors duration-200;
+  }
+  
+  .prose blockquote {
+    @apply border-l-4 border-blue-500 pl-6 py-2 bg-dark-900/50 rounded-r-lg my-8 italic text-dark-300;
+  }
+  
+  .prose code {
+    @apply bg-dark-800 text-blue-400 px-2 py-1 rounded text-sm;
+  }
+  
+  .prose pre {
+    @apply bg-dark-900 p-6 rounded-lg overflow-x-auto my-8 border border-dark-800;
+  }
+  
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+  
+  .prose ul, .prose ol {
+    @apply my-6 pl-6;
+  }
+  
+  .prose li {
+    @apply mb-2;
+  }
+  
+  .prose strong {
+    @apply text-white font-semibold;
+  }
+  
+  .prose em {
+    @apply text-dark-300;
+  }
+  
+  .prose hr {
+    @apply border-dark-700 my-12;
+  }
+</style>
